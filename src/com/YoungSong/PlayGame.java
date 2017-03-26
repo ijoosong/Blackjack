@@ -29,7 +29,7 @@ public class PlayGame {
         players.put(5,new Player("Randy",10000));
         players.put(2,new Player("Annie",10000));
         players.put(4,new Player("Cassidy",10000));
-//        players.put(6,new Player("Clara",10000));
+        players.put(6,new Player("Clara",10000));
          players.put(3,new Player("Joseph",10000));
     }
 
@@ -61,8 +61,8 @@ public class PlayGame {
             //  show 1st and 2nd card which are given to players
             for(Integer i : players.keySet()) {
                 if (players.get(i).getInicialBet() > 0) {
-                    System.out.println(players.get(i).getName() + "(#" + i + ")    " + players.get(i).getFirstcard() +
-                                        ", " + players.get(i).onHand.get(12));
+                    System.out.println(getDescription(players.get(i).getName(),16) +
+                                        players.get(i).getFirstcard() + ", " + players.get(i).onHand.get(12));
                 }
             }
 
@@ -71,7 +71,7 @@ public class PlayGame {
 
             if(isBlackJack(dealer)){
                 //  When dealer has a blackjack, do this
-                System.out.println("Dealer : " + dealer.getFirstcard() + ", " + dealer.onHand.get(12));
+                System.out.println(getDescription("Dealer",16) + dealer.getFirstcard() + ", " + dealer.onHand.get(12));
                 for(Integer i : players.keySet()){
                     Player player = players.get(i);
                     if(player.getInicialBet() > 0) {
@@ -84,12 +84,12 @@ public class PlayGame {
                 }
             } else {
                 //  if dealer doesn't have a blackjack, do this
-                System.out.println("Dealer : ?, " + dealer.onHand.get(12));
+                System.out.println(getDescription("Dealer",16) + "?, " + dealer.onHand.get(12));
                 for(Integer i : players.keySet()) {
                     Player player = players.get(i);
                     if(player.getInicialBet() > 0) {        //  check who did betting or not
                         if (isBlackJack(player)) {          //  if player has a blackjack, process 'win' and clear
-                            System.out.println("You got a Black Jack. Let me pay it.");
+                            System.out.println(player.getName() + " got a blackjack. Let me pay it.");
                             player.setBlackjack(player.getInicialBet());
                             player.setFirstBetAmount(0);
                             player.setInicialBet(0);
@@ -116,6 +116,14 @@ public class PlayGame {
         } else {
             System.out.println("No player. Add a player first.");
         }
+    }
+
+    private String getDescription(String message, int length){
+        message = message + " :" ;
+        for(int i=0; i<length-message.length();i++){
+            message = message + " ";
+        }
+        return message;
     }
 
     private boolean bettingToStart(){
@@ -258,7 +266,7 @@ public class PlayGame {
                 showFinal(player,31);
             }
         }
-        System.out.print("Dealler: ");
+        System.out.print(getDescription("Dealer",16));
         for(Integer i : dealer.onHand.keySet()){
             System.out.print(dealer.onHand.get(i) + ", ");
         }
@@ -366,7 +374,7 @@ public class PlayGame {
     }
 
     private void showFinal(Player player, int key){
-        System.out.print(player.getName() + " :   ");
+        System.out.print(getDescription(player.getName(),16));
         for(int i=key; i<key+9; i++) {
             if (player.onHand.containsKey(i)) {
                 System.out.print(player.onHand.get(i) + ", ");
