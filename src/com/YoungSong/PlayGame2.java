@@ -3,9 +3,9 @@ package com.YoungSong;
 import java.util.*;
 
 /**
- * Created by Young on 3/20/2017.
+ * Created by Young on 3/27/2017.
  */
-public class PlayGame {
+public class PlayGame2 {
     Scanner scanner = new Scanner(System.in);
     private static LinkedList<String> cardSet = new LinkedList<>();
     private static Map<Integer, Player> players = new HashMap<>();
@@ -21,7 +21,7 @@ public class PlayGame {
 
     Player dealer = new Player("Dealer", 1000000);
 
-    public PlayGame(int maxPlayerNum, int numOfDeck) {
+    public PlayGame2(int maxPlayerNum, int numOfDeck) {
         this.maxPlayerNum = maxPlayerNum;
         this.numOfDeck = numOfDeck;
         shuffleCards(numOfDeck);
@@ -30,7 +30,7 @@ public class PlayGame {
         players.put(2,new Player("Annie",10000));
         players.put(4,new Player("Cassidy",10000));
         players.put(6,new Player("Clara",10000));
-         players.put(3,new Player("Joseph",10000));
+        players.put(3,new Player("Joseph",10000));
     }
 
     public void startGame() {
@@ -61,8 +61,8 @@ public class PlayGame {
             //  show 1st and 2nd card which are given to players
             for(Integer i : players.keySet()) {
                 if (players.get(i).getInicialBet() > 0) {
-                    System.out.println(getDescription(players.get(i).getName(),16) +
-                                        players.get(i).getFirstcard() + ", " + players.get(i).onHand.get(12));
+                    System.out.println(getDescription(players.get(i).getName(),14) +
+                            players.get(i).getFirstcard() + ", " + players.get(i).onHand.get(12));
                 }
             }
 
@@ -71,7 +71,7 @@ public class PlayGame {
 
             if(isBlackJack(dealer)){
                 //  When dealer has a blackjack, do this
-                System.out.println(getDescription("Dealer",16) + dealer.getFirstcard() + ", " + dealer.onHand.get(12));
+                System.out.println(getDescription("Dealer",14) + dealer.getFirstcard() + ", " + dealer.onHand.get(12));
                 for(Integer i : players.keySet()){
                     Player player = players.get(i);
                     if(player.getInicialBet() > 0) {
@@ -84,7 +84,7 @@ public class PlayGame {
                 }
             } else {
                 //  if dealer doesn't have a blackjack, do this
-                System.out.println(getDescription("Dealer",16) + "?, " + dealer.onHand.get(12));
+                System.out.println(getDescription("Dealer",14) + "?, " + dealer.onHand.get(12));
                 for(Integer i : players.keySet()) {
                     Player player = players.get(i);
                     if(player.getInicialBet() > 0) {        //  check who did betting or not
@@ -122,7 +122,7 @@ public class PlayGame {
         message = message + " :" ;
         int x = length - message.length();
         for(int i=0 ; i<x ; i++){
-            message = message + " ";
+            message = message.concat(" ");
         }
         return message;
     }
@@ -153,9 +153,9 @@ public class PlayGame {
         if(dealer2ndCard.equals("A") || dealer2ndCard.equals("10") || dealer2ndCard.equals("9") || dealer2ndCard.equals("8")){
             isSplitCondition = firstCard.equals("9") || firstCard.equals("8");
         } else if(dealer2ndCard.equals("7")){
-            isSplitCondition = firstCard.equals("8") || firstCard.equals("7");
+            isSplitCondition = firstCard.equals("9") ||firstCard.equals("8") || firstCard.equals("7");
         } else {
-            isSplitCondition = !firstCard.equals("A") && Integer.parseInt(firstCard) < 9;
+            isSplitCondition = !firstCard.equals("A") && Integer.parseInt(firstCard) < 10;
         }
 
         if(!firstCard.equals(player.onHand.get(12))) {
@@ -267,7 +267,7 @@ public class PlayGame {
                 showFinal(player,31);
             }
         }
-        System.out.print(getDescription("Dealer",16));
+        System.out.print(getDescription("Dealer",14));
         for(Integer i : dealer.onHand.keySet()){
             System.out.print(dealer.onHand.get(i) + ", ");
         }
@@ -375,7 +375,7 @@ public class PlayGame {
     }
 
     private void showFinal(Player player, int key){
-        System.out.print(getDescription(player.getName(),16));
+        System.out.print(getDescription(player.getName(),14));
         for(int i=key; i<key+9; i++) {
             if (player.onHand.containsKey(i)) {
                 System.out.print(player.onHand.get(i) + ", ");
@@ -389,8 +389,8 @@ public class PlayGame {
             dealingWithBig(player, whichHand);
         } else if(dealer.onHand.get(12).equals("7")){
             dealingWith7(player, whichHand);
-        } else if (dealer.onHand.get(12).equals("2")) {
-            dealingWith2(player, whichHand);
+        } else if (dealer.onHand.get(12).equals("2") || dealer.onHand.get(12).equals("3")) {
+            dealingWith2or3(player, whichHand);
         } else {
             dealingWithSmall(player,whichHand);
         }
@@ -467,7 +467,7 @@ public class PlayGame {
             } else if (sumOfCards >= 18) {
                 isAnyOneAlive = true;
                 return;
-            } else if (sumOfCards >= 16) {
+            } else if (sumOfCards == 17) {
                 if (!isAceEleven) {
                     isAnyOneAlive = true;
                     return;
@@ -481,15 +481,15 @@ public class PlayGame {
         }
     }
 
-    private void dealingWith2(Player player, int whichHand){
+    private void dealingWith2or3(Player player, int whichHand){
         int key = whichHand * 10 + 3;
         int sumOfCards = makeSumOfCards(player, whichHand);
         boolean doWhile = true;
-        if((isAceEleven && sumOfCards <= 18) || sumOfCards==11 || sumOfCards==10) {
+        if((isAceEleven && sumOfCards <= 19) || sumOfCards==11 || sumOfCards==10 || sumOfCards==9) {
             doWhile = !doubleDown(player,whichHand);
         }
         while(doWhile) {
-            if (sumOfCards > 11) {
+            if (sumOfCards > 13) {
                 isAnyOneAlive = true;
                 return;
             }

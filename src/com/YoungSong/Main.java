@@ -18,7 +18,7 @@ public class Main {
                     doWhile = false;
                     break;
                 case "1":
-                    for (int i = 0; i < 1000; i++) {
+                    for (int i = 0; i < 10000; i++) {
                         game.startGame();
                     }
                     break;
