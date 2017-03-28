@@ -1,0 +1,21 @@
+This is how I would structure it.
+
+class players
+ - name
+ - chips/money
+ - cards
+ 
+class cards
+ - suit
+ - value
+ - shuffle
+
+blackjack_gameplay.java
+ - add players
+ - remove players
+ - deal hands
+ - hit/split/double down/stand
+ 
+Change each of the "big" parts of code to smaller parts so that you can test better.
+Try to take any function or if/else statement that's longer than 20 lines and make it into multiple functions that you can call.
+Then start to test afterwards.
